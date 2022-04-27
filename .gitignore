@@ -1,0 +1,7 @@
+# Ignore files and directories that support our Python virtual environment.
+bin/
+lib/
+pyvenv.cfg
+# Ignore the usual Vim and Python depris.
+*.swp
+*.pyc
