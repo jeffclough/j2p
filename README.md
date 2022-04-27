@@ -1,13 +1,22 @@
 # j2p
 This is a a really simple tool I use to extract and convert constant
-definitions from Java code to Python code.
+definitions from a Java package to Python code.
+
+This project makes heavy use of Chris Thunes's super-helpful
+[javalang](https://github.com/c2nes/javalang) python module. And since it
+depends on a 3rd-party module, I've set it up to run in a Python virtual
+environment. But don't worry. I also provide a simple shell script that makes
+running it that way as easy as running any other script on your path.
 
 ## Installation
-Once you've cloned this repo to your own filespace (e.g. ~/venvs/j2p),
-initialize the virtual environment there as follows:
 
-Get the j2p script, and set it up in a Python virtual environment.
+1. Clone this repo into your own filespace. I'm using ~/venvs/j2p for this.
+```shell
+mkdir ~/venvs
+git clone git@github.com:jeffclough/j2p.git ~/venvs/j2p
+```
 
+2. Initialize the virtual environment is your local repo.
 ```shell
 cd ~/venvs/j2p
 python3 -m venv .
@@ -16,8 +25,7 @@ pip install -r requirements.txt
 deactivate
 ```
 
-Add a symlink to ~/venvs/jp2/runner from someplace on your PATH.
-
+3. Add a symlink to ~/venvs/jp2/runner from someplace on your PATH.
 ```shell
 cd ~/my/bin
 ln -s ~/venvs/j2p/runner j2p
@@ -45,6 +53,9 @@ optional arguments:
   --debugger  Engages the Python debugger. See "Debugger Commands" section of
               https://docs.python.org/3/library/pdb.html for documentation.
 ```
+
+I don't recommend using j2p's --debugger option. It's really just for me to
+use while figuring out the particulars of using javalang.
 
 ## Running j2p
 
