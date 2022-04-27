@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+
+import argparse,pdb,sys
+import javalang
+
+ap=argparse.ArgumentParser(description="Read the java package source from the file named on the command line. Write the equivalent Python constant definitions to standard output. This is a fairly primitive Java interpreter, and there's not much thought given to error messages. Be sure to give it a valid, complete Java package source file.")
+ap.add_argument('filename',metavar='FILE',action='store',help="""Name of the file containing the Java package in question.""")
+ap.add_argument('--debugger',action='store_true',help="""Engages the Python debugger. See "Debugger Commands" section of https://docs.python.org/3/library/pdb.html for documentation.""")
+opt=ap.parse_args()
+
+if opt.debugger:
+  pdb.set_trace()
+with open(opt.filename,'r') as f:
+  source=f.read()
+  tree=javalang.parse.parse(source)
+  values={}
+  for t in tree.types: # Walk through the classes defined in this package.
+    if isinstance(t,javalang.tree.ClassDeclaration):
+      for field in t.fields: # Walk through the attributes in this class.
+        if isinstance(field,javalang.tree.FieldDeclaration):
+          # We're looking for literals.
+          lit=field.declarators[0]
+          if isinstance(lit,javalang.tree.VariableDeclarator):
+            name=lit.name
+            if isinstance(lit.initializer,javalang.tree.MemberReference):
+              value=values[lit.initializer.member]
+            else:
+              value=lit.initializer.value
+              if value in ('false','true'):
+                value=value.capitalize()
+            values[name]=value # There might be a future reference to this value.
+            print(f"{name}={value}")
